@@ -1,43 +1,66 @@
-require('dotenv').config()
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const passport = require("passport");
 
-const express = require('express')
-const app = express()
-const jwt = require('jsonwebtoken')
+// We load the Models
+require("./users//models/User");
+require("./posts//models/Post");
 
-app.use(express.json())
-
-let refreshTokens = []
-
-app.post('/token', (req, res) => {
-  const refreshToken = req.body.token
-  if (refreshToken == null) return res.sendStatus(401)
-  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403)
-    const accessToken = generateAccessToken({ name: user.name })
-    res.json({ accessToken: accessToken })
+const authRouter = require("./auth/auth.routes");
+const usersRouter = require("./users/users.routes");
+const postsRouter = require("./posts/posts.routes");
+require("dotenv").config();
+const app = express();
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  if (req.method === "OPTIONS") {
+    return res.send(200);
+  } else {
+    if (process.env.NODE_ENV != "test") {
+      console.log(req.originalUrl);
+    }
+    return next();
+  }
+});
+// Bodyparser middleware
+app.use(
+  bodyParser.urlencoded({
+    extended: false
   })
-})
+);
+app.use(bodyParser.json());
 
-app.delete('/logout', (req, res) => {
-  refreshTokens = refreshTokens.filter(token => token !== req.body.token)
-  res.sendStatus(204)
-})
-
-app.post('/login', (req, res) => {
-  // Authenticate User
-
-  const username = req.body.username
-  const user = { name: username }
-
-  const accessToken = generateAccessToken(user)
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-  refreshTokens.push(refreshToken)
-  res.json({ accessToken: accessToken, refreshToken: refreshToken })
-})
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' })
+// DB Config
+const db = process.env.MONGO_URI;
+if (process.env.NODE_ENV != "test") {
+  // Connect to MongoDB
+  mongoose
+    .connect(db, { useNewUrlParser: true })
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
 }
 
-app.listen(4000)
+// Passport middleware
+app.use(passport.initialize());
+
+// Passport config
+require("./config/passport")(passport);
+
+// Routes
+app.use("/api/users", usersRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/posts", postsRouter);
+
+app.get("/favicon.ico", (req, res) => {
+  res.end();
+  console.log("favicon requested");
+  return;
+});
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  if (process.env.NODE_ENV != "test") {
+    console.log(`Server up and running on port ${port} !`);
+  }
+});
