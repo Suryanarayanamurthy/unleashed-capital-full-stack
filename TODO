@@ -1,0 +1,8 @@
+prototype api-gateway mvp:
+    convert existing to es6 and rm clutter.
+~~~~~~~~    
+prototype auth with passport
+prototype auth to use db
+prototype FE
+---------------------
+cleanup crap:?
