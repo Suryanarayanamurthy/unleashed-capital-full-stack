@@ -1,0 +1,19 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "api-gateway to proxy requests to services inside dmz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api-gateway",
+    "nodejs",
+    "express"
+  ],
+  "author": "Surya Vajjhala",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
