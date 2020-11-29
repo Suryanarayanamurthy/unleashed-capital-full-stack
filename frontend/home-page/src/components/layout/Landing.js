@@ -8,9 +8,8 @@ class Landing extends Component {
         <div className="row">
           <div className="col s12 center-align">
             <h4>
-              <b>Welcome to homepage!</b>
+              Unleashed Capital Test Homepage...
             </h4>
-            <h4 style={{margin: "5rem 0"}}>Challenge: Simple app for <b>register, login, logout</b> functionality.</h4>
             <div className="col s12">
               <Link
                 to="/register"
@@ -22,11 +21,7 @@ class Landing extends Component {
             <div className="col s12">
               <Link
                 to="/login"
-                style={{
-                  width: "140px",
-                  borderRadius: "3px",
-                  letterSpacing: "1.5px",
-                  border: "1px solid",
+                style={{                  
                   marginTop: "1rem",
                 }}
                 className="btn btn-flat waves-effect white black-text"

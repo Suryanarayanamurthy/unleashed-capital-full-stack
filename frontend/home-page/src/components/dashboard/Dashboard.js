@@ -13,12 +13,15 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
 
     return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
+      <div className="container valign-wrapper">
         <div className="row">
           <div className="landing-copy col s12 center-align">
-            <h4>
-              Welcome <b>{user.name}!</b>
-              <p className="flow-text grey-text text-darken-1">
+            <h4 style={{fontWeight: '900'}}>
+              Welcome {user.name}!
+              <p className="flow-text grey-text text-darken-1" style={{
+                margin: '10rem 0',
+                fontWeight: '900',
+              }}>
                 To logout click <a href="/login" onClick={this.onLogoutClick}>here</a>
               </p>
             </h4>
