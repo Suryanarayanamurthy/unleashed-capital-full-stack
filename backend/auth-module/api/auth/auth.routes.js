@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require("passport");
 
 const AuthController = require("./controllers/auth.controller");
-const AuthMiddleware = require("./middlewares/auth.middleware");
 
 // @route POST api/users/register
 // @desc Register user
@@ -16,11 +15,7 @@ router.post("/register", AuthController.registerUser);
 // @access Public
 router.post("/login", AuthController.loginUser);
 
-router.post("/refresh", [
-  AuthMiddleware.JwtNeeded,
-  AuthMiddleware.verifyRefreshBodyField,
-  AuthMiddleware.validRefreshNeeded,
-  AuthController.refresh_token
-]);
+
+router.post("/check", AuthController.check);
 
 module.exports = router;

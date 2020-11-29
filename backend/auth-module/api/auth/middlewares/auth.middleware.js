@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const secret = require("../../../config/config").secret
 exports.verifyRefreshBodyField = (req, res, next) => {
   if (req.body && req.body.refresh_token) {
     next();
@@ -11,8 +12,8 @@ exports.verifyRefreshBodyField = (req, res, next) => {
 exports.validRefreshNeeded = (req, res, next) => {
   // We get the refresh token provided by the user
   var refresh_token = req.body.refresh_token;
-  // We use bcrypt to compare the hash with req.jwt.userId + process.env.JWT_SECRET
-  bcrypt.compare(req.jwt.id + process.env.JWT_SECRET, refresh_token, function(
+  // We use bcrypt to compare the hash with req.jwt.userId + JWT SECRET
+  bcrypt.compare(req.jwt.id + secret, refresh_token, function(
     err,
     comp
   ) {
@@ -53,7 +54,7 @@ exports.validJWTNeeded = (req, res, next) => {
       if (authorization[0] !== "Bearer") {
         return res.status(403).send({ error: "Need to pass a valid token" });
       } else {
-        req.jwt = jwt.verify(authorization[1], process.env.JWT_SECRET);
+        req.jwt = jwt.verify(authorization[1], secret);
         return next();
       }
     } catch (err) {

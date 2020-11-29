@@ -3,18 +3,18 @@ const jwt = require("jsonwebtoken");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const passport = require("passport");
+const secret = require("../../../config/config").secret
 // Load User model
 
 const mongoose = require("mongoose");
 var User = mongoose.model("User");
-const UsersController = require("../../users/controllers/users.controller");
 
 exports.generateTokens = user => {
   return new Promise((resolve, reject) => {
     // User needs to be identified with id
     // We generate the refresh token :
     // we generate a string
-    let refreshId = user.id + process.env.JWT_SECRET;
+    let refreshId = user.id + secret;
     // We generate salt
     bcrypt.genSalt(10, function(err, salt) {
       // We hash the refresh token with the salt
@@ -22,7 +22,7 @@ exports.generateTokens = user => {
         // We generate the jwttoken
         jwt.sign(
           user,
-          process.env.JWT_SECRET,
+          secret,
           {
             expiresIn: 60 * 60 // 30 min in seconds
           },
@@ -83,8 +83,31 @@ exports.registerUser = (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
+  
+    User.findOne({ email: req.body.email }).then(user => {
+      if (user) {
+        return res.status(400).json({ email: "Email already exists" });
+      } else {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password
+        });
+  
+        // Hashing password before saving it in database
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => res.json(user))
+              .catch(err => console.log(err));
+          });
+        });
+      }
+    });
 
-  return UsersController.insert(req, res);
 };
 
 exports.loginUser = (req, res) => {
@@ -98,11 +121,11 @@ exports.loginUser = (req, res) => {
 
   const email = req.body.email;
   const password = req.body.password;
-
   // Find user by email
   User.findOne({ email })
     .select("+password")
     .then(user => {
+      console.log(user.id)
       // Check if user exists
       if (!user) {
         return res.status(404).json({ auth: "Email not found" });
@@ -117,8 +140,56 @@ exports.loginUser = (req, res) => {
             id: user.id,
             name: user.name,
             email: user.email,
-            profilePicture: user.profilePicture,
-            permissionLevel: user.permissionLevel
+          };
+          this.generateTokens(payload)
+            .then(([token, refresh_token]) => {
+              res.status(200).json({
+                success: true,
+                token: "Bearer " + token,
+                refresh_token: refresh_token,
+                user
+              });
+            })
+            .catch(err => {
+              return res.status(400).send({ error: "Error", err: err });
+            });
+        } else {
+          return res.status(400).send({ error: "Password incorrect" });
+        }
+      });
+    });
+};
+
+exports.check = (req, res) => {
+  // Form validation
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const email = req.body.email;
+  const password = req.body.password;
+  // Find user by email
+  User.findOne({ email })
+    .select("+password")
+    .then(user => {
+      console.log(user.id)
+      // Check if user exists
+      if (!user) {
+        return res.status(404).json({ auth: "Email not found" });
+      }
+
+      // Check password
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          // User matched
+          // Create JWT Payload
+          const payload = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
           };
           this.generateTokens(payload)
             .then(([token, refresh_token]) => {
@@ -136,66 +207,4 @@ exports.loginUser = (req, res) => {
         }
       });
     });
-};
-
-exports.loginGoogle = (req, res, next) => {
-  const generateTokens = this.generateTokens;
-  passport.authenticate("google", function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.redirect("/login");
-    }
-    // User matched
-    // Create JWT Payload
-    const payload = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      profilePicture: user.profilePicture,
-      permissionLevel: user.permissionLevel
-    };
-    generateTokens(payload)
-      .then(([token, refresh_token]) => {
-        return res.redirect(
-          `http://localhost:3000/login?token=${token}&refresh_token=${refresh_token}`
-        );
-      })
-      .catch(err => {
-        return res.status(400).send({ error: "Error", err: err });
-      });
-  })(req, res, next);
-};
-
-exports.loginFacebook = (req, res, next) => {
-  const generateTokens = this.generateTokens;
-  passport.authenticate("facebook", function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.redirect("/login");
-    }
-    // User matched
-    // Create JWT Payload
-    const payload = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      profilePicture: user.profilePicture,
-      permissionLevel: user.permissionLevel
-    };
-    // Sign token
-
-    generateTokens(payload)
-      .then(([token, refresh_token]) => {
-        return res.redirect(
-          `http://localhost:3000/login?token=${token}&refresh_token=${refresh_token}`
-        );
-      })
-      .catch(err => {
-        return res.status(400).send({ error: "Error", err: err });
-      });
-  })(req, res, next);
 };

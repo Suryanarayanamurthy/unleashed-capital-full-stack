@@ -113,6 +113,19 @@ exports.getById = (req, res) => {
     });
 };
 
+exports.check = (req, res) => {
+  User.findById(req.params.userId)
+    .then(result => {
+      return res.status(200).send(result);
+    })
+    .catch(err => {
+      return res
+        .status(400)
+        .send({ error: "Error. Probably Wrong id.", err: err });
+    });
+};
+
+
 exports.patchById = (req, res) => {
   // We make sure to not patch the permissionLevel and id
   delete req.body["permissionLevel"];

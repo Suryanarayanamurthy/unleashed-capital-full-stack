@@ -5,10 +5,9 @@ const passport = require("passport");
 const mongoConStr = require("./config/config").mongo_connection_str;
 
 // We load the Models
-require("./api/users/models/User");
+require("./models/User");
 
 const authRouter = require("./api/auth/auth.routes");
-const usersRouter = require("./api/users/users.routes");
 require("dotenv").config();
 
 const app = express();
@@ -47,13 +46,10 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-app.use("/api/users", usersRouter);
-app.use("/api/auth", authRouter);
+app.use("/auth", authRouter);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4200;
 
 app.listen(port, () => {
-  if (process.env.NODE_ENV != "test") {
     console.log(`Server up and running on port ${port} !`);
-  }
 });

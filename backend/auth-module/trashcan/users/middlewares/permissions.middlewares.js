@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"),
-  secret = process.env.JWT_SECRET;
+  secret = require("../../../config/config").secret;
 
 const config = require("../../config/config");
 const ADMIN = config.permissionLevels.ADMIN;
