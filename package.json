@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "npm scripts for starting micro-services",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "newman run ./tests/localhost.postman_collection.json",
     "install": "concurrently \"npm install --prefix ./backend/api-gateway\" \"npm install --prefix ./backend/auth-module\" \"npm install --prefix ./frontend/home-page\"",
     "start": "concurrently \"npm run backend-start\" \"npm run frontend-start\"",
     "dev": "concurrently \"npm run backend-dev\" \"npm run frontend-start\"",
-    "backend-start": "concurrently \"npm start --prefix ./backend/api-gateway\" \"npm start --prefix ./backend/auth-module\"",
+    "backend-start": "concurrently \"npm  start  --prefix ./backend/api-gateway\" \"npm  start --prefix ./backend/auth-module\"",
     "backend-dev": "concurrently \"npm run dev --prefix ./backend/api-gateway\" \"npm run dev --prefix ./backend/auth-module\"",
     "frontend-start": "npm start --prefix ./frontend/home-page"
   },
@@ -25,7 +25,8 @@
     "url": "https://github.com/Suryanarayanamurthy/unleashed-capital-full-stack/issues"
   },
   "homepage": "https://github.com/Suryanarayanamurthy/unleashed-capital-full-stack#readme",
-  "dependencies": {
+  "devDependencies": {
+    "newman": "^5.2.1",
     "concurrently": "^5.3.0"
   }
 }

@@ -2,17 +2,25 @@ prototype api-gateway mvp:
   
 prototype auth with passport
 prototype auth to use db
-~~~~~~~~  
+
 prototype FE
 
 install, build and  run/deploy
-  - shell script to start servers locally
+  - npm scripts to start servers locally
   - docker-compose for starting multi container
     - dockerize stuff
-  - vagrantfile with docker swarm mode to 
----------------------
+  XXXX- vagrantfile with docker swarm mode.
 
+tests
+  - reuse existing postman-collection
+  - default tests using jest or whatever in react
 
+~~~~~~~~  
 cleanup crap:
  - clean up readme
  - es6 the code and rm clutter.
+ - sqash git commits to easy nav to history.
+---------------------
+
+leagend:
+XXXX : nt doing it,  nt worth it (literally).
