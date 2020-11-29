@@ -18,7 +18,7 @@ describe('Frontend automated tests', () => {
   })
 
   test('Check if "loginUser" function has been called in "authActions"', () => {
-    const isLogin = loginUser({email: "haseeb.khanzada@ymail.com", password: "123456"});
+    const isLogin = loginUser({email: "surya@somerandomguy.xyz", password: "pass123123"});
     expect(isLogin(0)).toBe();
   })
 

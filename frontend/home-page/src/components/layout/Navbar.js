@@ -18,7 +18,7 @@ class Navbar extends Component {
               }}
               className="col s5 brand-logo center black-text"
             >
-              UNLEASHED CAPITAL TEST - HASEEB
+              UNLEASHED CAPITAL FULL-STACK TEST - SURYA
             </Link>
           </div>
         </nav>
