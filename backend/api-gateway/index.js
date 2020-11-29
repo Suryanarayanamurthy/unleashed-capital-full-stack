@@ -55,4 +55,8 @@ for(let i = 0; i < services.length; i++) {
   });
 } 
 
-module.exports = app;
+const port = process.env.PORT || 4000;
+
+app.listen(port, () => {
+    console.log(`Server up and running on port ${port} !`);
+});

@@ -1,0 +1,34 @@
+version: '3'
+services:
+  web:
+    build: ./frontend/home-page
+    ports:
+      - "3001:3001"
+    #environment:
+    #  - NODE_ENV=dev
+    #  - STATE=test
+    networks:
+      - frontend
+  api-gateway:
+    build: ./backend/api-gateway
+    environment:
+     - SERVICE_AUTH=auth-module
+    networks:
+      - frontend
+      - backend
+  auth-module:
+    build: ./backend/auth-module
+    networks:
+      - backend
+
+      ### not paid enought to deal with relational-db, #postpone
+  # mysql:
+  #   image: "redis:latest"
+  #   networks:
+  #     - backend
+
+networks:
+  frontend:
+  backend:
+    driver: bridge
+   #internal: true ###cannot be internal bcos mongodb is connected over internet.
