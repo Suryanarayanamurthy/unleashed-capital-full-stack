@@ -1,47 +1,58 @@
-import express from 'express';
-import { json, urlencoded } from "body-parser";
-import { parse } from 'url';
-import services from './services.js';
-import proxy from './lib/proxy.mjs';
-import restreamer from './lib/restreamer.mjs';
-import cors from 'cors';
+const express       = require('express');
+const bodyParser    = require("body-parser");
+const cookieParser  = require('cookie-parser');
+const url           = require('url');
+const services      = require('./services.js');
+const proxy         = require('./lib/proxy');
+const restreamer    = require('./lib/restreamer');
+var cors            = require('cors');
 
 // set up the app
 const app = express();
-app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 
 app.use(cors());
 
-app.get('/', (_req, res) => res.json({message: "API Gateway is alive."}));
+app.get('/', function(req, res) {
+  res.json({
+    message: "API Gateway is alive."
+  });
+});
 
-app.get('/ping', (_req, res) =>res.json({message: "pong"}));
+app.get('/ping', function(req, res) {
+  res.json({
+    message: "pong"
+  });
+});
 
 
 // Bootstrap services
+for(let i = 0; i < services.length; i++) {
+  const name = services[i].name;
+  const host = services[i].host;
+  const port = services[i].port;
+  const rootPath = services[i].rootPath || "";
+  const protocol = services[i].protocol || "http";
 
-for (const service of services) {
-    console.log(service)
-    const name = service.name;
-    const host = service.host;
-    const port = service.port;
-    const rootPath = service.rootPath || "";
-    const protocol = service.protocol || "http";
-  
-    console.log(`Boostrapping service: ${protocol}://${host}:${port}/${rootPath}`);
-  
-    let middleware = [];
-  
-    // need to restream the request so that it can be proxied
-    middleware.push(restreamer());
-  
-    app.use(`/api/v1/${name}*`, middleware, (req, res, next) => {
-      const newPath = parse(req.originalUrl).pathname.replace(`/api/v1/${name}`, rootPath);
-      let targetUrl = protocol+"://"+host+":"+port+"/"+newPath;
-      console.log("Redirected to:"+targetUrl);
-      proxy.web(req, res, { target: `${protocol}://${host}:${port}/${newPath}` }, next);
-    });
-}
+  console.log(`Boostrapping service: ${protocol}://${host}:${port}/${rootPath}`);
 
-export default app;
+  let middleware = [];
+  if(services[i].middleware) {
+    middleware = services[i].middleware.map(text => require(`./middleware/${text}`));
+  }
+
+  // need to restream the request so that it can be proxied
+  middleware.push(restreamer());
+
+  app.use(`/api/v1/${name}*`, middleware, (req, res, next) => {
+    const newPath = url.parse(req.originalUrl).pathname.replace(`/api/v1/${name}`, rootPath);
+    let targetUrl = protocol+"://"+host+":"+port+"/"+newPath;
+    console.log("Redirected to:"+targetUrl);
+    proxy.web(req, res, { target: `${protocol}://${host}:${port}/${newPath}` }, next);
+  });
+} 
+
+module.exports = app;

@@ -1,12 +1,11 @@
-export default
+module.exports =
 [
   {
     "name": "auth",
     "host": process.env.SERVICE_AUTH || "localhost",
-    "port": "4010",
+    "port": "4200",
     "protocol": "http",
     "rootPath": "auth",
-    "endpoints": [],
   },
   {
     "name": "user",
