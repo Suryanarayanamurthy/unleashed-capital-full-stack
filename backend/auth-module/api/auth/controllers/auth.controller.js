@@ -125,7 +125,6 @@ exports.loginUser = (req, res) => {
   User.findOne({ email })
     .select("+password")
     .then(user => {
-      console.log(user.id)
       // Check if user exists
       if (!user) {
         return res.status(404).json({ auth: "Email not found" });

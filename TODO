@@ -1,8 +1,18 @@
 prototype api-gateway mvp:
-    convert existing to es6 and rm clutter.
-~~~~~~~~    
+  
 prototype auth with passport
 prototype auth to use db
+~~~~~~~~  
 prototype FE
+
+install, build and  run/deploy
+  - shell script to start servers locally
+  - docker-compose for starting multi container
+    - dockerize stuff
+  - vagrantfile with docker swarm mode to 
 ---------------------
-cleanup crap:?
+
+
+cleanup crap:
+ - clean up readme
+ - es6 the code and rm clutter.

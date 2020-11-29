@@ -48,7 +48,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/auth", authRouter);
 
-const port = process.env.PORT || 4200;
+const port = process.env.PORT || 5001;
 
 app.listen(port, () => {
     console.log(`Server up and running on port ${port} !`);
