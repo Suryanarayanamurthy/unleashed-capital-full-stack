@@ -47,7 +47,11 @@ the application is divided into 3 different applications, which can exist in the
 - api-gateway (./backend/api-gateway)
 - auth-module (./backend/auth-module)
 
-home-page: this is a react-app that makes the api calls to the api-gateway to access backend resources.
+home-page:
+-  this is a react-app that makes the api calls to the api-gateway to access backend resources.
+- there is a node.js(with express) wrapper web-server which serves the react-app's build folder when started. 
+this webserver mode of hosting is achived automatically when run using [`docker-compose up`](#run-in-docker)
+
 
 api-gateway:
 -  this api-gateway is a node.js(with express) app that acts as a reverse-proxy to redirect incoming api-requests to its respective micro-service.
@@ -58,3 +62,13 @@ api-gateway:
 auth-module:
 - this application is also a node.js(with express) app that uses passport's jwt token strategy for authentication.
 - it stores the user data and the encrypted passwords(using bcrypt) in mongodb (uses mongoose diver).
+
+# Credits/References
+This project is largely inspired by my own exising work on api-gateway
+- https://github.com/Suryanarayanamurthy/api-gateway
+
+and also took  inspiration by the blog post
+
+- https://www.toptal.com/nodejs/secure-rest-api-in-nodejs
+
+## developer
