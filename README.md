@@ -39,9 +39,9 @@ cd frontend/home-page && npm test
 ```
 
 # Structure
-This appication is structured as a micro-service archeture with scalability in mind.
+This application is structured to be a micro-service architectured application, with scalability in mind.
 
-the application is divided to 3 different applications, which can exist in their own repo and can be maintained and scaled independantly:
+the application is divided into 3 different applications, which can exist in their own repo and can be maintained and scaled independently:
 
 - home-page (./frontend/home-page)
 - api-gateway (./backend/api-gateway)
@@ -50,11 +50,11 @@ the application is divided to 3 different applications, which can exist in their
 home-page: this is a react-app that makes the api calls to the api-gateway to access backend resources.
 
 api-gateway:
--  this api-gateway is a node.js(with express) app that acts as a reverse-proxy to redirect incoming api-requests to it's respective micro-service.
-- this appication acts as a single point of contact for all incoming requests.
-- this service  maintaines a list of microservices that it sould proxy to, quite useful when the number of microservices get's out of hand as the application grows.
-- you can use the auth middle-ware to check authentication when the req coming-in requires authentication.
+-  this api-gateway is a node.js(with express) app that acts as a reverse-proxy to redirect incoming api-requests to its respective micro-service.
+- this application acts as a single point of contact for all incoming requests.
+- this service maintains a list of microservices that it should proxy to, quite useful when the number of microservices gets out of hand as the application grows.
+- you can use the auth middleware to check the auth headers before the auth is forwarded to the requested service.
 
 auth-module:
 - this application is also a node.js(with express) app that uses passport's jwt token strategy for authentication.
-- it stores the user data and the encrypted passwords(using bcrypt) in mongodb (uses mongoose diver)
+- it stores the user data and the encrypted passwords(using bcrypt) in mongodb (uses mongoose diver).
