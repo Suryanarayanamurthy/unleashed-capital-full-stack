@@ -15,12 +15,14 @@ tests
   - reuse existing postman-collection
   - default tests using jest or whatever in react
 
-~~~~~~~~  
+~~~~~~~~
 cleanup crap:
  - clean up readme
- - es6 the code and rm clutter.
+ XXXX - es6 the code 
+ - rm clutter.
  - sqash git commits to easy nav to history.
 ---------------------
 
 leagend:
 XXXX : nt doing it,  nt worth it (literally).
+~~~~~~~~ : done until here.
