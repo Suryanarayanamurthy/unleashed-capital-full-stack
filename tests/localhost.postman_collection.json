@@ -10,6 +10,21 @@
 			"item": [
 				{
 					"name": "auth/register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f4397043-6be9-46e6-a9b7-1e1a3b4dd3b7",
+								"exec": [
+									"pm.test(\"return email already exists err\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -39,6 +54,22 @@
 				},
 				{
 					"name": "auth/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3469e4d7-4fa2-470c-af9f-b56f8c198b59",
+								"exec": [
+									"",
+									"pm.test(\"login user\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -121,6 +152,22 @@
 				},
 				{
 					"name": "api/v1/auth/register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "277f9dd9-e290-40b6-b860-0f2a1c6d7065",
+								"exec": [
+									"",
+									"pm.test(\"return email already exists err\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],

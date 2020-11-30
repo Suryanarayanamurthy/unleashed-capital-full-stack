@@ -38,6 +38,17 @@ This repo also uses jest for testing react app (within frontend/home-page)
 cd frontend/home-page && npm test
 ```
 
+## Other useful npm scripts (at root level)
+
+- `npm run backend-start` :when you want to run start scripts of the backend services (useful to do [backend test](#test) by launching only the backend services).
+
+- `npm run dev`:
+like "npm start" but runs all the services in dev mode (usinging nodemon).
+
+- `npm run backend-dev`:
+launches only the backend services in dev mode.
+
+
 # Structure
 This application is structured to be a micro-service architectured application, with scalability in mind.
 

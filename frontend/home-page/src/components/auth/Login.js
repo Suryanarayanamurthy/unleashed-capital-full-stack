@@ -69,7 +69,7 @@ class Login extends Component {
                 <label htmlFor="email">Email</label>
                 <span className="red-text">
                   {errors.email}
-                  {errors.emailnotfound}
+                  {errors.auth}
                 </span>
                 <input
                   onChange={this.onChange}
@@ -78,7 +78,7 @@ class Login extends Component {
                   id="email"
                   type="email"
                   className={classnames("", {
-                    invalid: errors.email || errors.emailnotfound
+                    invalid: errors.email || errors.auth
                   })}
                 />
               </div>

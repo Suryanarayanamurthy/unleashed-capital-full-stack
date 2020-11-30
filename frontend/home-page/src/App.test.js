@@ -7,13 +7,9 @@ import { sumTwoNumbers, loginUser } from './actions/authActions'
 
 describe('Frontend automated tests', () => {
 
-  test('Random test to see if our testing logic is working. Adding 2 numbers', () => {
-    expect(sumTwoNumbers(2,4)).toBe(6);
-  })
-
-  test('Check if "Welcome to homepage" heading exists', () => {
+  test('Check if "Unleashed Capital Test Homepage..." text in home page', () => {
     const {getByText} = render(<App />);
-    const emailInput = getByText("Welcome to homepage!");
+    const emailInput = getByText("Unleashed Capital Test Homepage...");
     expect(emailInput).toBeInTheDocument();
   })
 
