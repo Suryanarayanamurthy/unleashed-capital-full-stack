@@ -28,7 +28,6 @@ Please make sure that you have:
 ## test
 This repo uses `postman collection` and `newman` cli util to run tests on rest-api.
 
-when the application is [running locally](#run-locally) run the npm script for testing
   ```
     npm test
   ```
@@ -40,13 +39,13 @@ cd frontend/home-page && npm test
 
 ## Other useful npm scripts (at root level)
 
-- `npm run backend-start` :when you want to run start scripts of the backend services (useful to do [backend test](#test) by launching only the backend services).
+- `npm run backend-start` :when you want to run start scripts of the backend services.
 
 - `npm run dev`:
-like "npm start" but runs all the services in dev mode (usinging nodemon).
+like "npm start" but runs all the services in dev mode (using nodemon).
 
 - `npm run backend-dev`:
-launches only the backend services in dev mode.
+launches only the backend services in dev mode (using nodemon). quite useful to develop apis using postman to iteratively test and implement apis.
 
 
 # Structure
